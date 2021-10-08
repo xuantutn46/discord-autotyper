@@ -1,0 +1,234 @@
+const puppeteer = require('puppeteer');
+const {types} = require("./utils/types");
+
+// list all the words here, will pick them randomly, doesn't matter how many!
+const words = {hunt:"rpg hunt t",heal:"rpg heal",work:"rpg axe",farm:"rpg farm"}
+let huntCount1 = 0;
+let workCount1 = 0;
+let farmCount1 = 0;
+
+function timeout(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+const BASE_URL = 'https://discord.com/login';
+// change this & enter the channel url
+const discord1 = {
+    browser: null,
+    page: null,
+
+    initialize: async () => {
+
+        discord1.browser = await puppeteer.launch({
+            headless: false,
+            defaultViewport: null,
+            args: [
+                '--start-maximized'
+                
+            ]
+        });
+        
+        discord1.page = await discord1.browser.newPage();
+
+    },
+
+    /**
+     * username and password
+     * @param {string} username
+     * @param {string} password
+     * @return {Promise<void>}
+     */
+
+    login: async (username, password) => {
+
+        await discord1.page.goto(BASE_URL, {
+            waitUntil: 'networkidle2'
+        })
+
+        discord1.browser.on('targetcreated', async function f() {
+
+            let pages = await discord1.browser.pages();
+          
+                      if (pages.length > 1) {
+                          await pages[0].close();
+          
+                          discord1.browser.off('targetcreated', f);
+                      }
+          
+        });
+        
+        // let loginButton = await discord.page.$x('//a[contains(., "Login")]');
+        // await discord.page.waitFor(1000)
+        // /* Click on login url button */
+        // await loginButton[1].click();
+
+        // await discord.page.waitForNavigation({
+        //     waitUntil: 'networkidle2'
+        // })
+
+        await discord1.page.waitFor(5000);
+
+        /* username and password */
+
+        await discord1.page.type('input[name="email"]', username, {
+            delay: 10
+        });
+
+        await discord1.page.type('input[name="password"]', password, {
+            delay: 10
+        });
+
+        /* clicking on login button */
+
+        loginButton = await discord1.page.$x('//div[contains(text(), "Login")]');
+        await loginButton[0].click();
+
+        await discord1.page.waitFor(5000);
+        const CHANNELS_URL = `https://discord.com/channels/612100463940075520/685513873520066621` //tu channel
+
+            await discord1.page.goto(CHANNELS_URL, {
+                
+            });
+
+        await discord1.page.waitFor(10000);
+        await discord1.page.keyboard.press('Escape')
+        await discord1.page.waitFor(5000);
+        // await discord1.page.waitFor('//div[contains(text(), "start")]')
+
+    },
+
+
+    /**
+     * Enter server id and channel urk
+     * @param { string } serverID
+     * @param { string } channelID
+     * @param { number } delay
+     * @return {Promise<void>}
+     */
+
+    likeChannelProcess: async (delay= 1) => {
+
+
+            async function initalStart () {
+                // await discord1.page.type('span[data-slate-object="text"]', words.hunt, {
+                //     // delay: 0
+                // });
+
+                // await discord1.page.keyboard.press('Enter')
+                // huntCount1++
+                
+                // await discord1.page.waitFor(5000);
+
+                // await discord1.page.type('span[data-slate-object="text"]', words.heal, {
+                //     delay: 100
+                // });
+                //
+                // await discord1.page.keyboard.press('Enter')
+
+                // await discord1.page.waitFor(5000);
+
+                await discord1.page.type('span[data-slate-object="text"]', words.work, {
+                    // delay: 0
+                });
+
+                await discord1.page.keyboard.press('Enter')
+                workCount1++
+                
+                await discord1.page.waitFor(5000);
+                
+                await discord1.page.type('span[data-slate-object="text"]', words.farm, {
+                    // delay: 0
+                });
+                
+                await discord1.page.keyboard.press('Enter')
+                
+                farmCount1++
+
+                console.debug('Partner start' + new Date() )
+
+            }
+
+            await initalStart();
+
+
+            async function rpghunt1 () {
+                const random = words.hunt
+                await discord1.page.type('span[data-slate-object="text"]', random, {
+                    delay: 0
+                });
+
+                await discord1.page.keyboard.press('Enter')
+
+                huntCount1++
+                //
+                // await discord1.page.waitFor(2000);
+                // await discord1.page.type('span[data-slate-object="text"]', words.heal, {
+                //     delay: 100
+                // });
+
+                // await discord1.page.keyboard.press('Enter')
+                //
+                // this logs the time the message was sent at and the total message count
+                console.debug('Message P sent: ' + random + ' , at: ' + new Date() + ', Message Count: ' + huntCount1 )
+                await discord1.page.waitFor(5000);
+                
+            }
+            async function rpgwork1 () {
+                const random = words.work
+                await discord1.page.type('span[data-slate-object="text"]', random, {
+                    delay: 0
+                });
+
+                await discord1.page.keyboard.press('Enter')
+
+                workCount1++
+                //
+                // await discord1.page.waitFor(2000);
+                // await discord1.page.type('span[data-slate-object="text"]', words.heal, {
+                //     delay: 100
+                // });
+
+                // await discord1.page.keyboard.press('Enter')
+                //
+                // this logs the time the message was sent at and the total message count
+                console.debug('Message P sent: ' + random + ' , at: ' + new Date() + ', Message Count: ' + workCount1 )
+                await discord1.page.waitFor(5000);
+                
+            }
+            async function rpgfarm1 () {
+                const random = words.farm
+                await discord1.page.type('span[data-slate-object="text"]', random, {
+                    delay: 0
+                });
+
+                await discord1.page.keyboard.press('Enter')
+
+                farmCount1++
+                //
+                // await discord1.page.waitFor(2000);
+                // await discord1.page.type('span[data-slate-object="text"]', words.heal, {
+                //     delay: 100
+                // });
+
+                // await discord1.page.keyboard.press('Enter')
+                //
+                // this logs the time the message was sent at and the total message count
+                console.debug('Message P sent: ' + random + ' , at: ' + new Date() + ', Message Count: ' + farmCount1 )
+                await discord1.page.waitFor(5000);
+                
+            }
+
+            // change the first number for minutes
+            // 3 * 60 * 1000 = 180000ms === 3 minutes
+            // setInterval(rpghunt1, delay * 40 * 1000)
+            // await timeout(5000)
+            setInterval(rpgwork1, delay * 200 * 1000)
+            await timeout(5000)
+            setInterval(rpgfarm1, delay * 400 * 1000)
+            await timeout(5000)
+
+
+
+    }
+}
+module.exports = discord1;

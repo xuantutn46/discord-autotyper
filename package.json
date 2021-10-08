@@ -1,0 +1,17 @@
+{
+  "name": "jsautomation",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^4.1.0",
+    "prompt-sync": "^4.2.0",
+    "puppeteer": "^5.2.0"
+  }
+}
