@@ -9,6 +9,7 @@ var healflagin = prompt("Need Heal ?: ");
 var healflag =parseInt(healflagin,10);
 var advin = prompt("Enter adv minute: ");
 var advtime =parseInt(advin,10);
+if(advtime !=0){advtime+=1}
 console.log(advtime); 
 var lbhi = prompt("Enter lb hour: ");
 var lbh =parseInt(lbhi,10);
@@ -16,6 +17,7 @@ var lbmi = prompt("Enter lb minute: ");
 var lbm =parseInt(lbmi,10);
 var lbin = lbh*60+lbm;
 var lbtime =parseInt(lbin,10);
+if(lbtime !=0){lbtime+=1}
 console.log(lbtime);
 farmflag = false;
 
@@ -28,29 +30,23 @@ switch(area) {
     case 3:
     case 4:
     case 5:
-        words = {hunt:"rpg hunt t",heal:"rpg heal",work:"rpg axe",farm:"rpg farm",adv:"rpg adv",lb:"rpg buy ed lb"}
+        words = {hunt:"rpg hunt t",heal:"rpg heal",work:"rpg axe",farm:"rpg farm bread",adv:"rpg adv",lb:"rpg buy ed lb"}
       break;
     case 6:
     case 7:
-        words = {hunt:"rpg hunt t",heal:"rpg heal",work:"rpg ladder",farm:"rpg farm",adv:"rpg adv",lb:"rpg buy ed lb"}
+        words = {hunt:"rpg hunt t",heal:"rpg heal",work:"rpg ladder",farm:"rpg farm bread",adv:"rpg adv",lb:"rpg buy ed lb"}
       break;
     case 8:
-        words = {hunt:"rpg hunt t",heal:"rpg heal",work:"rpg bowsaw",farm:"rpg farm",adv:"rpg adv",lb:"rpg buy ed lb"}
+        words = {hunt:"rpg hunt t",heal:"rpg heal",work:"rpg bowsaw",farm:"rpg farm bread",adv:"rpg adv",lb:"rpg buy ed lb"}
       break;
     case 9:
     case 10:
     case 11:
     case 12:
-        words = {hunt:"rpg hunt t",heal:"rpg heal",work:"rpg chainsaw",farm:"rpg farm",adv:"rpg adv",lb:"rpg buy ed lb"}
-      break;
     case 13:
-      // code block
-      break;
     case 14:
-      // code block
-      break;
     case 15:
-      // code block
+        words = {hunt:"rpg hunt t",heal:"rpg heal",work:"rpg chainsaw",farm:"rpg farm bread",adv:"rpg adv",lb:"rpg buy ed lb"}
       break;
   }
 let huntCount = 0;
@@ -76,7 +72,7 @@ const discord = {
             defaultViewport: null,
             args: [
                 '--start-maximized',
-                '--window-position=1921,0'
+                // '--window-position=1921,0'
                 // '--window-size=781,1080',
                 // '--window-position=-7,0'
                 
@@ -100,12 +96,14 @@ const discord = {
             waitUntil: 'networkidle2'
         })
 
+        await discord.page.waitFor(2000);
+
         await discord.browser.on('targetcreated', async function f() {
 
-            let pages = await discord.browser.pages();
+            let pages0 = await discord.browser.pages();
           
-                      if (pages.length > 1) {
-                          await pages[0].close();
+                      if (pages0.length > 1) {
+                          await pages0[0].close();
           
                           discord.browser.off('targetcreated', f);
                       }
@@ -140,6 +138,7 @@ const discord = {
 
         await discord.page.waitFor(5000);
         const CHANNELS_URL = `https://discord.com/channels/612100463940075520/685513873520066621` //tu channel
+        // const CHANNELS_URL = `https://discord.com/channels/854189081101074433/873563934798512148` //vn channel
         
             await discord.page.goto(CHANNELS_URL, {
                 
@@ -171,7 +170,7 @@ const discord = {
                 await discord.page.keyboard.press('Enter')
                 huntCount++
                 
-                if(healflag==1){
+                if(healflag>=1){
                     await discord.page.waitFor(5000);
                     await discord.page.type('span[data-slate-object="text"]', words.heal, {
                         // delay: 0
@@ -211,7 +210,7 @@ const discord = {
                     await discord.page.keyboard.press('Enter')
                     
                     advCount++
-                    advtime=40
+                    // advtime=40
 
                     await discord.page.waitFor(5000);
 
@@ -233,7 +232,7 @@ const discord = {
                     await discord.page.keyboard.press('Enter')
                     
                     lbCount++
-                    lbtime=180
+                    // lbtime=180
 
                 }
 
@@ -322,7 +321,35 @@ const discord = {
                 });
 
                 await discord.page.keyboard.press('Enter')
-                advtime=40
+
+                advCount++
+                
+                await discord.page.waitFor(2000);
+                await discord.page.type('span[data-slate-object="text"]', words.heal, {
+                    delay: 0
+                });
+
+                await discord.page.keyboard.press('Enter')
+                if (advCount==1){
+                    clearInterval(mytimer);
+                }
+                
+                // this logs the time the message was sent at and the total message count
+                console.debug('Message M sent: ' + words.adv + ' , at: ' + new Date() + ', Message Count: ' + advCount )
+
+                await discord.page.waitFor(5000);
+                await timeout(5000)
+                setInterval(rpgadv1, delay * 40 * 60 * 1000)    
+                await timeout(5000)
+                
+            }
+            async function rpgadv1 () {
+                await discord.page.type('span[data-slate-object="text"]', words.adv, {
+                    delay: 0
+                });
+
+                await discord.page.keyboard.press('Enter')
+
                 advCount++
                 
                 await discord.page.waitFor(2000);
@@ -338,13 +365,33 @@ const discord = {
                 await discord.page.waitFor(5000);
                 
             }
+
             async function rpglb () {
                 await discord.page.type('span[data-slate-object="text"]', words.lb, {
                     delay: 0
                 });
 
                 await discord.page.keyboard.press('Enter')
-                lbtime=180
+
+                lbCount++
+                if (lbCount==1){
+                    clearInterval(mylbtimer);
+                }
+                // this logs the time the message was sent at and the total message count
+                console.debug('Message M sent: ' + words.lb + ' , at: ' + new Date() + ', Message Count: ' + lbCount )
+
+                await discord.page.waitFor(5000);
+                await timeout(5000)
+                setInterval(rpglb1, delay * 180 * 60 * 1000)
+                await timeout(5000)
+            }
+            async function rpglb1 () {
+                await discord.page.type('span[data-slate-object="text"]', words.lb, {
+                    delay: 0
+                });
+
+                await discord.page.keyboard.press('Enter')
+                
                 lbCount++
 
                 // this logs the time the message was sent at and the total message count
@@ -356,18 +403,40 @@ const discord = {
 
             // change the first number for minutes
             // 3 * 60 * 1000 = 180000ms === 3 minutes
+            await timeout(5000)
             setInterval(rpghunt, delay * 40 * 1000)
             await timeout(5000)
             setInterval(rpgwork, delay * 200 * 1000)
             await timeout(5000)
             if(farmflag==true){
+                await timeout(5000)
                 setInterval(rpgfarm, delay * 400 * 1000)
                 await timeout(5000)
             }
-            setInterval(rpgadv, delay * advtime * 60 * 1000)
-            await timeout(5000)
-            setInterval(rpglb, delay * lbtime * 60 * 1000)
-            await timeout(5000)
+            //
+            if(advCount==0){
+                await timeout(5000)
+                var mytimer = setInterval(rpgadv, delay * advtime * 60 * 1000)
+                await timeout(5000)
+            }
+            
+            if(lbCount==0){
+                await timeout(5000)
+                var mylbtimer = setInterval(rpglb, delay * lbtime * 60 * 1000)
+                await timeout(5000)
+            }
+            //
+            if(advtime==0){
+                await timeout(5000)
+                setInterval(rpgadv1, delay * 40 * 60 * 1000)
+                await timeout(5000)
+            }
+            
+            if(lbtime==0){
+                await timeout(5000)
+                setInterval(rpglb1, delay * 180 * 60 * 1000)
+                await timeout(5000)
+            }
 
     }
 }
